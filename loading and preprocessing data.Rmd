@@ -1,0 +1,18 @@
+## R plot
+
+```{r plot total number each day, echo=TRUE}
+Act <- read.csv("activity.csv", na.strings = "NA")
+Activity <- Act[complete.cases(Act),]
+Ttlday <- aggregate(steps~date, data = Activity, sum)
+barplot(Ttlday$steps, names.arg = Ttlday$date, col = Ttlday$date)
+```
+## R mean and median
+
+```{r cacluate mean and median,echo = TRUE}
+Ttldayavg <-aggregate(steps~date, data = Activity, mean, na.rm =TRUE)
+Ttldaymed <-aggregate(steps~date, data = Activity, median, na.rm = TRUE)
+### Mean
+mean(Ttlday$steps)
+### Median
+median(Ttlday$steps)
+```

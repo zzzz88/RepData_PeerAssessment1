@@ -1,0 +1,27 @@
+# imputing missing data
+```{r echo=TRUE}
+data <- read.csv("activity.csv")
+sum(complete.cases(data)==FALSE)
+completes <- data[complete.cases(data)==TRUE,]
+splitByDay<-split(completes,completes$date, drop=TRUE)          
+dailySteps<-sapply(splitByDay, function(x) sum(x$steps))      
+Splitinterval <- split(completes, completes$interval, drop = TRUE)
+intervalavg <- sapply(Splitinterval, function(x) mean(x$steps))
+count <- 0
+for(i in 1:nrow(data)){
+        if(is.na(data[i,1])){
+                data[i,1] <- intervalavg[as.character(data[i,3])]
+                count <- count +1
+        }
+}
+newsplitByDay<-split(data,data$date)       
+newdailySteps<-sapply(newsplitByDay, function(x) sum(x$steps)) 
+```
+#making difference plots
+```{r echo= TRUE}
+par(mfrow= c(1,2),mar = c(4,4,4,4))
+hist(dailySteps, main="Hist Total Steps per Day", xlab="# Steps", col="bisque3")
+abline(v=mean(dailySteps), lty=3, col="blue")   
+hist(newdailySteps, main = "Hist New Total Steps", col = "blue")
+abline(v= mean(newdailySteps),lty =2, col = "red")
+```
